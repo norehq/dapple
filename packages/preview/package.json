@@ -1,0 +1,42 @@
+{
+  "name": "@norehq/dapple-preview",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite",
+    "format": "prettier --write .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@norehq/prettier",
+  "dependencies": {
+    "@base-ui/react": "^1.5.0",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@hugeicons/core-free-icons": "^4.2.0",
+    "@hugeicons/react": "^1.1.6",
+    "@norehq/dapple": "workspace:*",
+    "@tailwindcss/vite": "^4.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "shadcn": "^4.8.3",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.0",
+    "tslib": "^2.8.1",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@norehq/prettier": "^0.1.0",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "prettier": "^3.8.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.12"
+  }
+}

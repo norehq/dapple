@@ -1,0 +1,7 @@
+"$schema" = "./node_modules/wrangler/config-schema.json"
+name = "dapple-preview"
+compatibility_date = "2026-05-31"
+
+[assets]
+directory = "./packages/preview/dist"
+not_found_handling = "single-page-application"

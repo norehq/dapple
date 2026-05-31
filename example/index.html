@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dapple Example</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="header">
+        <div>
+          <p class="eyebrow">@norehq/dapple</p>
+          <h1>Vanilla Vite example</h1>
+        </div>
+        <button id="mode-button" type="button">
+          <span id="mode-label">lines</span>
+        </button>
+      </header>
+      <section class="preview-panel">
+        <div class="toolbar">
+          <span>person-01.jpg</span>
+          <span class="status">registry package</span>
+        </div>
+        <div
+          id="dapple-root"
+          class="stage"
+          aria-label="Dapple renderer example"></div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
