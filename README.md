@@ -11,7 +11,7 @@
 <h3 align="center">
   Transform images into crisp, expressive dot-and-scanline artwork.
 </h3>
-<br/><br/><br/><br/>
+<br/><br/>
 Dapple is a small WebGL renderer for turning images into graphic dot, scanline,
 and hybrid mark treatments. It is built for product previews, editorial
 surfaces, loading states, and interfaces that need a distinctive image texture
