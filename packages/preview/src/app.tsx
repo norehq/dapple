@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DappleField } from '@norehq/dapple/react-field'
 import type { ReactElement } from 'react'
-import type { DappleSettings } from '@norehq/dapple'
+import type { DapplePresentationMode, DappleSettings } from '@norehq/dapple'
 
 import { PreviewPane, SettingsPanel } from '@/components/blocks'
 import { DEFAULT_PREVIEW_SETTINGS } from '@/config'
@@ -9,6 +9,47 @@ import { DEFAULT_PREVIEW_SETTINGS } from '@/config'
 type ToastState = {
   id: number
   message: string
+}
+
+const MOBILE_DEVICE_PATTERN =
+  /Android|BlackBerry|iPad|iPhone|iPod|IEMobile|Mobile|Opera Mini/i
+
+const detectMobileDevice = (): boolean => {
+  if (MOBILE_DEVICE_PATTERN.test(window.navigator.userAgent)) {
+    return true
+  }
+
+  return (
+    window.navigator.maxTouchPoints > 1 &&
+    window.matchMedia('(max-width: 980px)').matches
+  )
+}
+
+const previewDefaultSettings = (
+  presentationMode: DapplePresentationMode,
+): Partial<DappleSettings> => ({
+  ...DEFAULT_PREVIEW_SETTINGS,
+  presentationMode,
+})
+
+const useDefaultPresentationMode = (): DapplePresentationMode => {
+  const [presentationMode] = useState<DapplePresentationMode>(() =>
+    detectMobileDevice() ? 'composited' : 'direct',
+  )
+
+  useEffect(() => {
+    const root = document.documentElement
+    const isMobile = presentationMode === 'composited'
+
+    root.classList.toggle('is-mobile-device', isMobile)
+    root.classList.toggle('is-desktop-device', !isMobile)
+
+    return () => {
+      root.classList.remove('is-mobile-device', 'is-desktop-device')
+    }
+  }, [presentationMode])
+
+  return presentationMode
 }
 
 const LoadingRoute = (): ReactElement => (
@@ -26,11 +67,12 @@ const LoadingRoute = (): ReactElement => (
 )
 
 const PreviewRoute = (): ReactElement => {
+  const defaultPresentationMode = useDefaultPresentationMode()
   const [baseSettings, setBaseSettings] = useState<Partial<DappleSettings>>(
-    DEFAULT_PREVIEW_SETTINGS,
+    () => previewDefaultSettings(defaultPresentationMode),
   )
   const [previewSettings, setPreviewSettings] = useState<Partial<DappleSettings>>(
-    DEFAULT_PREVIEW_SETTINGS,
+    () => previewDefaultSettings(defaultPresentationMode),
   )
   const [resetVersion, setResetVersion] = useState(0)
   const [toast, setToast] = useState<ToastState | null>(null)
@@ -72,6 +114,7 @@ const PreviewRoute = (): ReactElement => {
         previewSettings={previewSettings}
       />
       <SettingsPanel
+        defaultPresentationMode={defaultPresentationMode}
         onBaseSettingsChange={setBaseSettings}
         onNotify={showToast}
         onPreviewSettingsChange={setPreviewSettings}

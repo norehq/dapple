@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DatabaseExportIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import type { DappleMarkMode, DappleSettings } from '@norehq/dapple'
+import type {
+  DappleMarkMode,
+  DapplePresentationMode,
+  DappleSettings,
+} from '@norehq/dapple'
 import type { ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -22,6 +26,7 @@ import { PresetControls } from './preset-controls'
 import { SliderControls } from './slider-controls'
 
 type SettingsPanelProps = {
+  defaultPresentationMode: DapplePresentationMode
   onBaseSettingsChange: (settings: Partial<DappleSettings>) => void
   onNotify: (message: string) => void
   onPreviewSettingsChange: (settings: Partial<DappleSettings>) => void
@@ -29,6 +34,7 @@ type SettingsPanelProps = {
 }
 
 export const SettingsPanel = ({
+  defaultPresentationMode,
   onBaseSettingsChange,
   onNotify,
   onPreviewSettingsChange,
@@ -41,7 +47,10 @@ export const SettingsPanel = ({
   const [markMode, setMarkMode] = useState<DappleMarkMode>(DEFAULT_MARK_MODE)
   const [previewQuality, setPreviewQuality] = useState<PreviewQuality>('high')
   const [settings, setSettings] = useState<Partial<DappleSettings>>(
-    DEFAULT_PREVIEW_SETTINGS,
+    () => ({
+      ...DEFAULT_PREVIEW_SETTINGS,
+      presentationMode: defaultPresentationMode,
+    }),
   )
   const interactionEndTimeoutRef = useRef<number | null>(null)
   const pendingSettingsRef = useRef<Partial<DappleSettings> | null>(null)
@@ -114,8 +123,11 @@ export const SettingsPanel = ({
 
     flushSettingsPatch()
     setActivePresetId(defaultPreset.id)
-    setSettings(defaultPreset.settings)
-  }, [flushSettingsPatch, markMode, resetVersion])
+    setSettings(current => ({
+      ...defaultPreset.settings,
+      presentationMode: current.presentationMode ?? defaultPresentationMode,
+    }))
+  }, [defaultPresentationMode, flushSettingsPatch, markMode, resetVersion])
 
   useEffect(() => {
     onBaseSettingsChange(settings)
@@ -126,9 +138,10 @@ export const SettingsPanel = ({
       ...settings,
       ...PREVIEW_QUALITY_SETTINGS[previewQuality],
       markMode,
+      presentationMode: settings.presentationMode ?? defaultPresentationMode,
       renderStrategy: isInteracting ? 'continuous' : 'static',
     }),
-    [isInteracting, markMode, previewQuality, settings],
+    [defaultPresentationMode, isInteracting, markMode, previewQuality, settings],
   )
 
   useEffect(() => {
@@ -166,7 +179,10 @@ export const SettingsPanel = ({
   const applyPreset = (preset: Preset) => {
     flushSettingsPatch()
     setActivePresetId(preset.id)
-    setSettings(preset.settings)
+    setSettings(current => ({
+      ...preset.settings,
+      presentationMode: current.presentationMode ?? defaultPresentationMode,
+    }))
   }
 
   const updateMarkMode = (nextMarkMode: DappleMarkMode) => {
@@ -175,7 +191,10 @@ export const SettingsPanel = ({
     flushSettingsPatch()
     setMarkMode(nextMarkMode)
     setActivePresetId(nextPreset.id)
-    setSettings(nextPreset.settings)
+    setSettings(current => ({
+      ...nextPreset.settings,
+      presentationMode: current.presentationMode ?? defaultPresentationMode,
+    }))
   }
 
   const exportSettings = async () => {
@@ -191,6 +210,8 @@ export const SettingsPanel = ({
         ...currentSettings,
         ...PREVIEW_QUALITY_SETTINGS[previewQuality],
         markMode,
+        presentationMode:
+          currentSettings.presentationMode ?? defaultPresentationMode,
         renderStrategy: 'static',
       },
     }

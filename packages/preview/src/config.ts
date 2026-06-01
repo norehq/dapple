@@ -2,6 +2,7 @@ import type {
   DappleDotSampleMode,
   DappleImageFit,
   DappleMarkMode,
+  DapplePresentationMode,
   DappleSettings,
   DappleToneTarget,
 } from '@norehq/dapple'
@@ -562,4 +563,12 @@ export const IMAGE_FIT_OPTIONS: Array<{
 }> = [
   { label: 'Cover', value: 'cover' },
   { label: 'Contain', value: 'contain' },
+]
+
+export const PRESENTATION_MODE_OPTIONS: Array<{
+  label: string
+  value: DapplePresentationMode
+}> = [
+  { label: 'Direct', value: 'direct' },
+  { label: 'Composited', value: 'composited' },
 ]

@@ -2,6 +2,7 @@ import type {
   DappleDotSampleMode,
   DappleImageFit,
   DappleMarkMode,
+  DapplePresentationMode,
   DappleSettings,
   DappleToneTarget,
 } from '@norehq/dapple'
@@ -10,6 +11,7 @@ import type { ReactElement } from 'react'
 import {
   DOT_SAMPLE_MODE_OPTIONS,
   IMAGE_FIT_OPTIONS,
+  PRESENTATION_MODE_OPTIONS,
   TONE_TARGET_OPTIONS,
 } from '@/config'
 import {
@@ -87,6 +89,26 @@ export const AdvancedControls = ({
         </SelectTrigger>
         <SelectContent>
           {IMAGE_FIT_OPTIONS.map(option => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </label>
+
+    <label className="grid gap-2">
+      <span className="text-xs text-muted-foreground">Presentation</span>
+      <Select
+        onValueChange={value =>
+          onSettingChange('presentationMode', value as DapplePresentationMode)
+        }
+        value={settings.presentationMode ?? 'direct'}>
+        <SelectTrigger className="w-full">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {PRESENTATION_MODE_OPTIONS.map(option => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>

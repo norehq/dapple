@@ -27,8 +27,8 @@ type DownloadMode = 'background' | 'transparent'
 
 type PreviewStageProps = {
   errorMessage: string | null
-  isLoading: boolean
   field: DappleFieldOptions
+  isLoading: boolean
   onError: DappleErrorHandler
   onNotify: (message: string) => void
   onReady: () => void
@@ -166,7 +166,7 @@ export const PreviewStage = ({
   }
 
   return (
-    <div className="relative h-[min(70dvh,620px)] min-h-80 min-[981px]:h-auto min-[981px]:min-h-0 min-[981px]:flex-1">
+    <div className="relative h-[min(70svh,620px)] min-h-80 min-[981px]:h-auto min-[981px]:min-h-0 min-[981px]:flex-1">
       <DappleCanvas
         className={`transition-opacity duration-300 ease-out ${
           hasReadySource ? 'opacity-100' : 'opacity-0'
