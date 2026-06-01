@@ -59,7 +59,6 @@ export const createCanvasElement = (): HTMLCanvasElement => {
   canvas.style.height = '100%'
   canvas.style.inset = '0'
   canvas.style.position = 'absolute'
-  canvas.style.touchAction = 'none'
   canvas.style.width = '100%'
   canvas.style.zIndex = '0'
 
