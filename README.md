@@ -20,11 +20,14 @@ without handing layout control to a heavy graphics stack. Preview it at
 
 ## Highlights
 
-- Framework-agnostic WebGL renderer with optional React entry points.
-- Line, dot, and hybrid rendering modes with tone, density, and softness
-  controls.
-- Lightweight placeholder and dot-field utilities for loading states and empty
+- Framework-agnostic renderer with vanilla and React entry points.
+- Line, dot, and hybrid mark modes with shared tone and density controls.
+- Async image loading with lifecycle callbacks for loading, resize, render, and
+  errors.
+- Bounded render resolution and texture downscaling for predictable GPU usage.
+- Direct and composited presentation paths for desktop, mobile, and WebView
   surfaces.
+- Placeholder and dot-field utilities for loading states and empty surfaces.
 
 ## What Is Included
 
