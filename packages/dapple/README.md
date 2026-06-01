@@ -23,36 +23,17 @@ React users can also install React peer dependencies as usual.
 import { createDappleRenderer } from '@norehq/dapple'
 
 const renderer = createDappleRenderer(container, {
-  onError(error, event) {
-    console.error(error, event.source)
-  },
-  onLoad(event) {
-    console.info(event.imageWidth, event.imageHeight)
-  },
-  placeholder: {
-    backgroundColor: '#000000',
-    dashColor: '#696963',
-  },
+  onError: error => console.error(error),
   settings: {
     backgroundColor: '#000000',
     dashColor: '#959595',
-    dotGamma: 1,
-    lineWidth: 0.45,
     markMode: 'lines',
-    power: -0.1,
     tileSize: 10,
-    toneTarget: 'light',
-    zoom: 1.25,
   },
 })
 
-// The placeholder is visible immediately. Image resources load later.
 await renderer.load({ imageUrl: '/hero.webp' })
-
-renderer.update({
-  tileSize: 16,
-})
-
+renderer.update({ markMode: 'dots', tileSize: 14 })
 renderer.dispose()
 ```
 
@@ -145,26 +126,52 @@ export function LoadingField() {
 
 `markMode` selects one of three rendering styles:
 
-- `lines`: horizontal scanline marks from the source image.
-- `dots`: circular dapple marks sampled from the source image.
-- `hybrid`: dot marks blended with horizontal line detail.
+- `lines`: horizontal scanline marks.
+- `dots`: circular dapple marks.
+- `hybrid`: dots with horizontal line detail.
 
-The line layer uses one short horizontal segment per cell. `lineWidth` controls
-segment thickness, `lineStrength` controls opacity, and `lineSoftness` controls
-edge falloff.
-
-Dot settings are available in dot and hybrid modes. Use `dotScale` for maximum
-dot radius, `dotGamma` for tone response, `dotMinRadius` for preserving tiny
-marks, `dotSoftness` for edge antialiasing, and `dotSampleMode: 'multi'` to
-reduce missed fine details.
-
-Shared controls apply across modes. Use `tileSize` for grid density, `power` to
-shift the tone response, `toneTarget: 'light'` for light marks on a dark
-background, or `toneTarget: 'dark'` for dark marks on a light background.
+Common controls include `tileSize` for grid density, `power` for tone response,
+`toneTarget` for light-on-dark or dark-on-light output, and `dashColor` /
+`backgroundColor` for the palette. Line modes use `lineWidth`, `lineStrength`,
+and `lineSoftness`; dot modes use `dotScale`, `dotGamma`, `dotMinRadius`,
+`dotSoftness`, and `dotSampleMode`.
 
 The renderer uses weighted luminance rather than a plain RGB average. Use
 `highlightRolloff` to protect bright areas from becoming flat white blocks, and
 `shadowBoost` to retain a little more low-end tone before marks are generated.
+
+## Presentation
+
+`presentationMode` controls how the final WebGL image is presented:
+
+- `direct`: render the effect directly into the visible canvas. This is the
+  default and has the least GPU work.
+- `composited`: render the effect into an offscreen target, then run a small
+  presentation pass into an opaque visible canvas.
+
+Use `composited` when the canvas is placed in a constrained compositor, such as
+mobile browsers, embedded WebViews, transformed or scrolling containers, or
+screens where transparent WebGL output appears blank even though exports are
+valid. It costs an extra fullscreen pass plus one render-sized texture, so keep
+`direct` for normal desktop pages unless you need the more stable presentation
+path.
+
+A common setup is to default mobile devices to `composited`:
+
+```ts
+import { createDappleRenderer } from '@norehq/dapple'
+
+const isMobile =
+  /Android|iPad|iPhone|iPod|Mobile/i.test(navigator.userAgent) ||
+  (navigator.maxTouchPoints > 1 &&
+    window.matchMedia('(max-width: 980px)').matches)
+
+const renderer = createDappleRenderer(container, {
+  settings: {
+    presentationMode: isMobile ? 'composited' : 'direct',
+  },
+})
+```
 
 ## Async Loading
 

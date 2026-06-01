@@ -25,14 +25,28 @@ const forEachProgram = (
 }
 
 export const clearScene = (resources: SceneResources) => {
+  resources.gl.bindFramebuffer(resources.gl.FRAMEBUFFER, null)
   resources.gl.clear(resources.gl.COLOR_BUFFER_BIT)
+
+  if (resources.presentationFramebuffer) {
+    resources.gl.bindFramebuffer(
+      resources.gl.FRAMEBUFFER,
+      resources.presentationFramebuffer,
+    )
+    resources.gl.clear(resources.gl.COLOR_BUFFER_BIT)
+    resources.gl.bindFramebuffer(resources.gl.FRAMEBUFFER, null)
+  }
 }
 
-export const renderScene = (resources: SceneResources, settings: DappleSettings) => {
+export const renderEffectScene = (
+  resources: SceneResources,
+  settings: DappleSettings,
+  framebuffer: WebGLFramebuffer | null,
+) => {
   const programResources = resources.finalPrograms[settings.markMode]
 
   prepareDraw(resources, programResources)
-  resources.gl.bindFramebuffer(resources.gl.FRAMEBUFFER, null)
+  resources.gl.bindFramebuffer(resources.gl.FRAMEBUFFER, framebuffer)
   resources.gl.viewport(0, 0, resources.renderWidth, resources.renderHeight)
   resources.gl.activeTexture(resources.gl.TEXTURE0 + IMAGE_TEXTURE_UNIT)
   resources.gl.bindTexture(resources.gl.TEXTURE_2D, resources.imageTexture)

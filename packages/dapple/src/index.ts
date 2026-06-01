@@ -11,6 +11,7 @@ export type {
   DappleMarkMode,
   DapplePlaceholder,
   DapplePowerPreference,
+  DapplePresentationMode,
   DappleRenderEvent,
   DappleRenderHandler,
   DappleRenderer,

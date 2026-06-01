@@ -20,7 +20,7 @@ import {
 } from '../webgl/resources'
 import {
   clearScene,
-  renderScene,
+  renderEffectScene,
   syncSettingsUniforms,
   syncViewportUniforms,
   uploadImageTexture,
@@ -35,6 +35,12 @@ import {
   emitResourcesReady,
   type RendererCallbacks,
 } from './events'
+import {
+  canvasBlob,
+  renderPresentationScene,
+  resizePresentationTarget,
+  snapshotCanvas,
+} from './presentation'
 import type {
   DapplePlaceholder,
   DappleRenderer,
@@ -45,26 +51,6 @@ import type {
 } from '../types'
 
 export class WebGlDappleRenderer implements DappleRenderer {
-  private static CanvasBlob(
-    canvas: HTMLCanvasElement,
-    options: DappleSnapshotOptions,
-  ): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        blob => {
-          if (!blob) {
-            reject(new Error('Unable to export image.'))
-            return
-          }
-
-          resolve(blob)
-        },
-        options.type ?? 'image/png',
-        options.quality,
-      )
-    })
-  }
-
   private static NormalizeError(error: unknown): Error {
     if (error instanceof Error) {
       return error
@@ -81,38 +67,12 @@ export class WebGlDappleRenderer implements DappleRenderer {
     return STATIC_RENDER_LOG_INTERVAL
   }
 
-  private static SnapshotCanvas(resources: SceneResources): HTMLCanvasElement {
-    const { gl, renderHeight, renderWidth } = resources
-    const pixels = new Uint8Array(renderWidth * renderHeight * 4)
-    const rowLength = renderWidth * 4
-    const imageData = new ImageData(renderWidth, renderHeight)
-    const canvas = document.createElement('canvas')
-
-    gl.finish()
-    gl.readPixels(0, 0, renderWidth, renderHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
-
-    for (let y = 0; y < renderHeight; y += 1) {
-      const sourceStart = (renderHeight - y - 1) * rowLength
-      const targetStart = y * rowLength
-
-      imageData.data.set(
-        pixels.subarray(sourceStart, sourceStart + rowLength),
-        targetStart,
-      )
-    }
-
-    canvas.width = renderWidth
-    canvas.height = renderHeight
-    canvas.getContext('2d')?.putImageData(imageData, 0, 0)
-
-    return canvas
-  }
-
   private static ShouldRecreateResources(
     previousSettings: DappleSettings,
     nextSettings: DappleSettings,
   ): boolean {
     return previousSettings.powerPreference !== nextSettings.powerPreference
+      || previousSettings.presentationMode !== nextSettings.presentationMode
   }
 
   private static ShouldResize(
@@ -252,6 +212,7 @@ export class WebGlDappleRenderer implements DappleRenderer {
     resources.renderHeight = renderSize.height
     resources.canvas.width = renderSize.width
     resources.canvas.height = renderSize.height
+    resizePresentationTarget(resources)
     syncViewportUniforms(resources, cssWidth, cssHeight)
     this.textureKey = ''
     this.uploadImageTexture()
@@ -287,9 +248,12 @@ export class WebGlDappleRenderer implements DappleRenderer {
     this.render(performance.now())
 
     try {
-      const canvas = WebGlDappleRenderer.SnapshotCanvas(resources)
+      const canvas = snapshotCanvas(
+        resources,
+        resources.presentationFramebuffer,
+      )
 
-      return await WebGlDappleRenderer.CanvasBlob(canvas, options)
+      return await canvasBlob(canvas, options)
     } finally {
       if (wasContinuous || this.settings.renderStrategy === 'continuous') {
         this.start()
@@ -405,10 +369,15 @@ export class WebGlDappleRenderer implements DappleRenderer {
       return
     }
 
-    this.resources = createSceneResources(this.root, this.settings.powerPreference)
+    this.resources = createSceneResources(
+      this.root,
+      this.settings.powerPreference,
+      this.settings.presentationMode,
+    )
     this.syncSettings()
     this.log('webgl-created', {
       powerPreference: this.settings.powerPreference,
+      presentationMode: this.settings.presentationMode,
     })
     emitResourcesReady(this.callbacks, this.resources)
   }
@@ -450,7 +419,13 @@ export class WebGlDappleRenderer implements DappleRenderer {
       return
     }
 
-    renderScene(resources, this.settings)
+    if (resources.presentationMode === 'composited') {
+      renderEffectScene(resources, this.settings, resources.presentationFramebuffer)
+      renderPresentationScene(resources, this.settings)
+    } else {
+      renderEffectScene(resources, this.settings, null)
+    }
+
     emitRender(this.callbacks, {
       markMode: this.settings.markMode,
       renderHeight: resources.renderHeight,

@@ -255,3 +255,18 @@ export const linesFragmentShader = `
     gl_FragColor = vec4(dotColor, alpha);
   }
 `
+
+export const presentationFragmentShader = `
+  precision highp float;
+
+  uniform vec3 presentationBackgroundColor;
+  uniform vec2 presentationSize;
+  uniform sampler2D tScene;
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / max(presentationSize, vec2(1.0));
+    vec4 color = texture2D(tScene, uv);
+
+    gl_FragColor = vec4(mix(presentationBackgroundColor, color.rgb, color.a), 1.0);
+  }
+`

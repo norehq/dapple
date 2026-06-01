@@ -10,6 +10,8 @@ export type DappleMarkMode = 'dots' | 'hybrid' | 'lines'
 
 export type DapplePowerPreference = 'default' | 'high-performance' | 'low-power'
 
+export type DapplePresentationMode = 'composited' | 'direct'
+
 export type DappleSource = {
   crossOrigin?: HTMLImageElement['crossOrigin']
   imageElement?: HTMLImageElement
@@ -42,6 +44,7 @@ export type DappleSettings = {
   maxRenderPixels: number
   power: number
   powerPreference: DapplePowerPreference
+  presentationMode: DapplePresentationMode
   renderStrategy: DappleRenderStrategy
   performanceLogging: boolean
   shadowBoost: number

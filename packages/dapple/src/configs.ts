@@ -2,6 +2,7 @@ import {
   dotsFragmentShader,
   hybridFragmentShader,
   linesFragmentShader,
+  presentationFragmentShader,
 } from './webgl/shaders'
 import type { DappleMarkMode, DapplePlaceholder, DappleSettings } from './types'
 
@@ -25,6 +26,7 @@ export const DEFAULT_SETTINGS: DappleSettings = {
   performanceLogging: false,
   power: -0.02,
   powerPreference: 'default',
+  presentationMode: 'direct',
   renderStrategy: 'static',
   shadowBoost: 0.12,
   tileSize: 10,
@@ -51,6 +53,7 @@ export const FULLSCREEN_VERTICES = new Float32Array([
 ])
 
 export const IMAGE_TEXTURE_UNIT = 0
+export const PRESENTATION_TEXTURE_UNIT = 0
 export const POSITION_ATTRIBUTE_LOCATION = 0
 
 export const STATIC_RENDER_LOG_INTERVAL = 500
@@ -80,6 +83,14 @@ export const PROGRAM_UNIFORM_KEYS = [
   'tile',
   'viewportSize',
   'zoom',
+] as const
+
+export const PRESENTATION_FRAGMENT_SHADER = presentationFragmentShader
+
+export const PRESENTATION_UNIFORM_KEYS = [
+  'presentationBackgroundColor',
+  'presentationSize',
+  'tScene',
 ] as const
 
 export const mergeSettings = (

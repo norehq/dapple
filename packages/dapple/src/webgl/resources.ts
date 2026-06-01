@@ -3,6 +3,8 @@ import {
   FINAL_FRAGMENT_SHADERS,
   FULLSCREEN_VERTICES,
   IMAGE_TEXTURE_UNIT,
+  PRESENTATION_FRAGMENT_SHADER,
+  PRESENTATION_UNIFORM_KEYS,
   POSITION_ATTRIBUTE_LOCATION,
   PROGRAM_UNIFORM_KEYS,
 } from '../configs'
@@ -22,6 +24,10 @@ export type SceneResources = {
   finalPrograms: Record<DappleMarkMode, ProgramResources>
   gl: WebGLRenderingContext
   imageTexture: WebGLTexture
+  presentationFramebuffer: WebGLFramebuffer | null
+  presentationMode: DappleSettings['presentationMode']
+  presentationProgram: ProgramResources | null
+  presentationTexture: WebGLTexture | null
   positionBuffer: WebGLBuffer
   powerPreference: DappleSettings['powerPreference']
   renderHeight: number
@@ -81,6 +87,14 @@ const programUniforms = (
     PROGRAM_UNIFORM_KEYS.map(key => [key, gl.getUniformLocation(program, key)]),
   )
 
+const presentationUniforms = (
+  gl: WebGLRenderingContext,
+  program: WebGLProgram,
+): Record<string, UniformLocation> =>
+  Object.fromEntries(
+    PRESENTATION_UNIFORM_KEYS.map(key => [key, gl.getUniformLocation(program, key)]),
+  )
+
 const createProgramResources = (
   gl: WebGLRenderingContext,
   fragmentShaderSource: string,
@@ -93,14 +107,34 @@ const createProgramResources = (
   }
 }
 
+const createPresentationProgramResources = (
+  gl: WebGLRenderingContext,
+): ProgramResources => {
+  const program = createProgram(gl, PRESENTATION_FRAGMENT_SHADER)
+
+  return {
+    program,
+    uniforms: presentationUniforms(gl, program),
+  }
+}
+
+const configureTexture = (gl: WebGLRenderingContext, texture: WebGLTexture) => {
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+}
+
 export const createSceneResources = (
   root: HTMLDivElement,
   powerPreference: DappleSettings['powerPreference'],
+  presentationMode: DappleSettings['presentationMode'],
 ): SceneResources => {
   const canvas = createCanvasElement()
   const gl = requiredResource(
     canvas.getContext('webgl', {
-      alpha: true,
+      alpha: presentationMode === 'direct',
       antialias: false,
       premultipliedAlpha: false,
       powerPreference,
@@ -109,11 +143,23 @@ export const createSceneResources = (
   )
   const positionBuffer = requiredResource(gl.createBuffer(), 'buffer')
   const imageTexture = requiredResource(gl.createTexture(), 'texture')
+  const presentationFramebuffer =
+    presentationMode === 'composited'
+      ? requiredResource(gl.createFramebuffer(), 'framebuffer')
+      : null
+  const presentationTexture =
+    presentationMode === 'composited'
+      ? requiredResource(gl.createTexture(), 'texture')
+      : null
   const finalPrograms = {
     dots: createProgramResources(gl, FINAL_FRAGMENT_SHADERS.dots),
     hybrid: createProgramResources(gl, FINAL_FRAGMENT_SHADERS.hybrid),
     lines: createProgramResources(gl, FINAL_FRAGMENT_SHADERS.lines),
   }
+  const presentationProgram =
+    presentationMode === 'composited'
+      ? createPresentationProgramResources(gl)
+      : null
 
   root.appendChild(canvas)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
@@ -121,12 +167,13 @@ export const createSceneResources = (
   gl.enableVertexAttribArray(POSITION_ATTRIBUTE_LOCATION)
   gl.vertexAttribPointer(POSITION_ATTRIBUTE_LOCATION, 2, gl.FLOAT, false, 0, 0)
   gl.activeTexture(gl.TEXTURE0 + IMAGE_TEXTURE_UNIT)
-  gl.bindTexture(gl.TEXTURE_2D, imageTexture)
+  configureTexture(gl, imageTexture)
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+
+  if (presentationTexture) {
+    configureTexture(gl, presentationTexture)
+  }
+
   gl.clearColor(0, 0, 0, 0)
 
   return {
@@ -134,6 +181,10 @@ export const createSceneResources = (
     finalPrograms,
     gl,
     imageTexture,
+    presentationFramebuffer,
+    presentationMode,
+    presentationProgram,
+    presentationTexture,
     positionBuffer,
     powerPreference,
     renderHeight: 1,
@@ -144,9 +195,21 @@ export const createSceneResources = (
 export const disposeSceneResources = (resources: SceneResources) => {
   resources.gl.deleteBuffer(resources.positionBuffer)
   resources.gl.deleteTexture(resources.imageTexture)
+  if (resources.presentationFramebuffer) {
+    resources.gl.deleteFramebuffer(resources.presentationFramebuffer)
+  }
+
+  if (resources.presentationTexture) {
+    resources.gl.deleteTexture(resources.presentationTexture)
+  }
+
   Object.values(resources.finalPrograms).forEach(programResources => {
     resources.gl.deleteProgram(programResources.program)
   })
+  if (resources.presentationProgram) {
+    resources.gl.deleteProgram(resources.presentationProgram.program)
+  }
+
   resources.canvas.remove()
 }
 
