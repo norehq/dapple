@@ -1,5 +1,5 @@
 {
-  "name": "@norehq/dapple-example",
+  "name": "@unix/dapple-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@norehq/dapple": "latest"
+    "@unix/dapple": "latest"
   },
   "devDependencies": {
     "prettier": "^3.8.3",

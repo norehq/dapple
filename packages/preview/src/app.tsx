@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { DappleField } from '@norehq/dapple/react-field'
+import { DappleField } from '@unix/dapple/react-field'
 import type { ReactElement } from 'react'
-import type { DapplePresentationMode, DappleSettings } from '@norehq/dapple'
+import type { DapplePresentationMode, DappleSettings } from '@unix/dapple'
 
 import { PreviewPane, SettingsPanel } from '@/components/blocks'
 import { DEFAULT_PREVIEW_SETTINGS } from '@/config'

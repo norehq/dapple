@@ -1,15 +1,15 @@
 import { ChevronDownIcon, Download04Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useEffect, useRef, useState } from 'react'
-import { DappleField } from '@norehq/dapple/react-field'
-import { DappleCanvas, type DappleCanvasHandle } from '@norehq/dapple/react'
+import { DappleField } from '@unix/dapple/react-field'
+import { DappleCanvas, type DappleCanvasHandle } from '@unix/dapple/react'
 import {
   DEFAULT_SETTINGS,
   type DappleErrorHandler,
   type DappleSettings,
   type DappleSource,
-} from '@norehq/dapple'
-import type { DappleFieldOptions } from '@norehq/dapple/field'
+} from '@unix/dapple'
+import type { DappleFieldOptions } from '@unix/dapple/field'
 import type { ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'

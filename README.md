@@ -16,7 +16,7 @@ Dapple is a small WebGL renderer for turning images into graphic dot, scanline,
 and hybrid mark treatments. It is built for product previews, editorial
 surfaces, loading states, and interfaces that need a distinctive image texture
 without handing layout control to a heavy graphics stack. Preview it at
-[dapple.nore.sh](https://dapple.nore.sh).
+[dapple.witt.im](https://dapple.witt.im).
 
 ## Highlights
 
@@ -31,9 +31,9 @@ without handing layout control to a heavy graphics stack. Preview it at
 
 ## What Is Included
 
-- `@norehq/dapple`: the framework-agnostic renderer, plus optional React
+- `@unix/dapple`: the framework-agnostic renderer, plus optional React
   wrappers.
-- `@norehq/dapple-preview`: a Vite preview app for tuning settings and testing
+- `@unix/dapple-preview`: a Vite preview app for tuning settings and testing
   image sources.
 - Shared TypeScript, Vite, and Prettier configuration for the workspace.
 
@@ -42,7 +42,7 @@ without handing layout control to a heavy graphics stack. Preview it at
 Use the package in an app:
 
 ```bash
-pnpm add @norehq/dapple
+pnpm add @unix/dapple
 ```
 
 For API examples and renderer options, see

@@ -1,4 +1,4 @@
-# @norehq/dapple
+# @unix/dapple
 
 A small WebGL renderer for dapple images with lines, dots, and hybrid mark
 modes. The core API is framework agnostic and the React wrapper is available
@@ -6,13 +6,13 @@ from a separate subpath.
 
 ## Links
 
-- GitHub: [github.com/norehq/dapple](https://github.com/norehq/dapple)
-- Preview: [dapple.nore.sh](https://dapple.nore.sh)
+- GitHub: [github.com/unix/dapple](https://github.com/unix/dapple)
+- Preview: [dapple.witt.im](https://dapple.witt.im)
 
 ## Install
 
 ```bash
-pnpm add @norehq/dapple
+pnpm add @unix/dapple
 ```
 
 React users can also install React peer dependencies as usual.
@@ -20,7 +20,7 @@ React users can also install React peer dependencies as usual.
 ## Vanilla API
 
 ```ts
-import { createDappleRenderer } from '@norehq/dapple'
+import { createDappleRenderer } from '@unix/dapple'
 
 const renderer = createDappleRenderer(container, {
   onError: error => console.error(error),
@@ -75,7 +75,7 @@ lifecycle callbacks:
 ## React API
 
 ```tsx
-import { DappleCanvas } from '@norehq/dapple/react'
+import { DappleCanvas } from '@unix/dapple/react'
 
 export function Preview() {
   return (
@@ -96,12 +96,12 @@ React convenience callback after successful image load/render.
 
 ## Field
 
-`@norehq/dapple/field` exports a standalone dot-field generator for loading
+`@unix/dapple/field` exports a standalone dot-field generator for loading
 surfaces, empty states, or preview backdrops. It is separate from the WebGL
 renderer, so applications can opt in without coupling it to image rendering.
 
 ```ts
-import { createDappleFieldStyle } from '@norehq/dapple/field'
+import { createDappleFieldStyle } from '@unix/dapple/field'
 
 const style = createDappleFieldStyle({
   backgroundColor: '#050505',
@@ -112,10 +112,10 @@ const style = createDappleFieldStyle({
 })
 ```
 
-React apps can use the optional wrapper from `@norehq/dapple/react-field`:
+React apps can use the optional wrapper from `@unix/dapple/react-field`:
 
 ```tsx
-import { DappleField } from '@norehq/dapple/react-field'
+import { DappleField } from '@unix/dapple/react-field'
 
 export function LoadingField() {
   return <DappleField jitter={0.54} seed="preview" />
@@ -159,7 +159,7 @@ path.
 A common setup is to default mobile devices to `composited`:
 
 ```ts
-import { createDappleRenderer } from '@norehq/dapple'
+import { createDappleRenderer } from '@unix/dapple'
 
 const isMobile =
   /Android|iPad|iPhone|iPod|Mobile/i.test(navigator.userAgent) ||

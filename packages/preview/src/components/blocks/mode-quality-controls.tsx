@@ -1,4 +1,4 @@
-import type { DappleMarkMode } from '@norehq/dapple'
+import type { DappleMarkMode } from '@unix/dapple'
 import type { ReactElement } from 'react'
 
 import {

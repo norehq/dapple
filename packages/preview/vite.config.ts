@@ -11,16 +11,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(dirname, './src'),
-      '@norehq/dapple/field': resolve(dirname, '../../packages/dapple/src/field.ts'),
-      '@norehq/dapple/react': resolve(
+      '@unix/dapple/field': resolve(dirname, '../../packages/dapple/src/field.ts'),
+      '@unix/dapple/react': resolve(
         dirname,
         '../../packages/dapple/src/react.tsx',
       ),
-      '@norehq/dapple/react-field': resolve(
+      '@unix/dapple/react-field': resolve(
         dirname,
         '../../packages/dapple/src/react-field.tsx',
       ),
-      '@norehq/dapple': resolve(dirname, '../../packages/dapple/src/index.ts'),
+      '@unix/dapple': resolve(dirname, '../../packages/dapple/src/index.ts'),
       components: resolve(dirname, './src/components'),
       hooks: resolve(dirname, './src/hooks'),
       lib: resolve(dirname, './src/lib'),

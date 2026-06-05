@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dapple",
+  "compatibility_date": "2026-06-05",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+  },
+  "routes": [
+    {
+      "pattern": "dapple.witt.im",
+      "custom_domain": true,
+    },
+  ],
+}

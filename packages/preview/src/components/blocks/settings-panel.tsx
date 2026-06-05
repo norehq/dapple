@@ -5,7 +5,7 @@ import type {
   DappleMarkMode,
   DapplePresentationMode,
   DappleSettings,
-} from '@norehq/dapple'
+} from '@unix/dapple'
 import type { ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'

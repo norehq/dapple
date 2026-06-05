@@ -19,10 +19,10 @@ export const HeaderBlock = ({
     <div className="min-w-0">
       <a
         className="mb-1 inline-flex text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-        href="https://github.com/norehq/dapple"
+        href="https://github.com/unix/dapple"
         rel="noreferrer"
         target="_blank">
-        @norehq/dapple
+        @unix/dapple
       </a>
       <h1 className="text-balance text-lg/tight font-medium tracking-normal sm:text-xl/tight">
         Transform images into crisp, expressive dot-and-scanline artwork.

@@ -5,7 +5,7 @@ import type {
   DapplePresentationMode,
   DappleSettings,
   DappleToneTarget,
-} from '@norehq/dapple'
+} from '@unix/dapple'
 
 export const IMAGE_SOURCES = [
   {

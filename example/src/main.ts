@@ -1,4 +1,4 @@
-import { createDappleRenderer, type DappleMarkMode } from '@norehq/dapple'
+import { createDappleRenderer, type DappleMarkMode } from '@unix/dapple'
 
 import personImageUrl from './person-01.jpg'
 import './style.css'

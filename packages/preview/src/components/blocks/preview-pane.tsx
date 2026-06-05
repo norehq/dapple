@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, ReactElement } from 'react'
-import type { DappleSettings, DappleSource } from '@norehq/dapple'
-import type { DappleFieldOptions } from '@norehq/dapple/field'
+import type { DappleSettings, DappleSource } from '@unix/dapple'
+import type { DappleFieldOptions } from '@unix/dapple/field'
 
 import {
   DEFAULT_IMAGE_INDEX,

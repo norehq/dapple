@@ -1,6 +1,6 @@
 {
-  "name": "@norehq/dapple",
-  "version": "0.1.1",
+  "name": "@unix/dapple",
+  "version": "0.2.0",
   "description": "A small WebGL dapple renderer for images.",
   "license": "MIT",
   "type": "module",

@@ -6,18 +6,18 @@
   "type": "module",
   "packageManager": "pnpm@11.1.3",
   "scripts": {
-    "dev": "pnpm --filter @norehq/dapple-preview dev",
+    "dev": "pnpm --filter @unix/dapple-preview dev",
     "build": "pnpm -r build",
-    "cf:preview:build": "pnpm --filter @norehq/dapple-preview build",
-    "cf:preview:deploy": "pnpm cf:preview:build && wrangler deploy",
-    "cf:preview:dry-run": "pnpm cf:preview:build && wrangler deploy --dry-run",
+    "preview:build": "pnpm --filter @unix/dapple-preview build",
+    "preview:deploy": "pnpm preview:build && pnpm --dir packages/preview exec wrangler deploy --config wrangler.jsonc",
+    "preview:dry-run": "pnpm preview:build && pnpm --dir packages/preview exec wrangler deploy --config wrangler.jsonc --dry-run",
     "format": "prettier --write .",
-    "release": "pnpm --filter @norehq/dapple build && pnpm --filter @norehq/dapple publish --access public --no-git-checks",
+    "release": "pnpm --filter @unix/dapple build && pnpm --filter @unix/dapple publish --access public --no-git-checks",
     "typecheck": "pnpm -r typecheck"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/norehq/dapple"
+    "url": "https://github.com/unix/dapple"
   },
   "prettier": "@norehq/prettier",
   "devDependencies": {

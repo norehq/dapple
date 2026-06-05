@@ -7,7 +7,7 @@ settings:
 importers:
   .:
     dependencies:
-      '@norehq/dapple':
+      '@unix/dapple':
         specifier: latest
         version: 0.1.0
     devDependencies:
@@ -49,7 +49,7 @@ packages:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
 
-  '@norehq/dapple@0.1.0':
+  '@unix/dapple@0.1.0':
     resolution:
       {
         integrity: sha512-i8LIxCf6ckXSnURBsY6MfacYuLUfpJWzs5tXnOOhbMIGwPFO3cowrZj/yigQAzT4xLcO63ooOvtqjBHXQIOwMw==,
@@ -497,7 +497,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.2
     optional: true
 
-  '@norehq/dapple@0.1.0': {}
+  '@unix/dapple@0.1.0': {}
 
   '@oxc-project/types@0.132.0': {}
 
