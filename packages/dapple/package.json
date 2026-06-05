@@ -1,6 +1,6 @@
 {
   "name": "@unix/dapple",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A small WebGL dapple renderer for images.",
   "license": "MIT",
   "type": "module",
@@ -43,7 +43,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@norehq/prettier",
+  "prettier": "@unix/prettier",
   "peerDependencies": {
     "react": ">=18"
   },
@@ -53,13 +53,13 @@
     }
   },
   "devDependencies": {
-    "@norehq/prettier": "^0.1.0",
-    "@types/react": "^19.2.14",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@types/react": "^19.2.16",
+    "@unix/prettier": "^0.1.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "prettier": "^3.8.3",
-    "react": "^19.2.6",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.12",
-    "vite-plugin-dts": "^5.0.0"
+    "react": "^19.2.7",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16",
+    "vite-plugin-dts": "^5.0.2"
   }
 }
