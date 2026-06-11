@@ -29,13 +29,9 @@ without handing layout control to a heavy graphics stack. Preview it at
   surfaces.
 - Placeholder and dot-field utilities for loading states and empty surfaces.
 
-## What Is Included
+## Similar Projects
 
-- `@unix/dapple`: the framework-agnostic renderer, plus optional React
-  wrappers.
-- `@unix/dapple-preview`: a Vite preview app for tuning settings and testing
-  image sources.
-- Shared TypeScript, Vite, and Prettier configuration for the workspace.
+- [`unix/dapple-flow`](https://github.com/unix/dapple-flow): Responsive ASCII-like glyph fields for heroes, panels, and product surfaces.
 
 ## Getting Started
 
